@@ -7,6 +7,9 @@ class Reservation < ApplicationRecord
   validate :returned_on_cannot_be_in_the_past
   validate :returned_on_cannot_be_revised, on: :update
 
+  delegate :reserved?, to: :book, prefix: true
+  delegate :actively_reading?, to: :user, prefix: true
+
   scope :active, -> { where(returned_on: nil) }
   scope :inactive, -> { where.not(returned: nil) }
 
@@ -32,13 +35,5 @@ class Reservation < ApplicationRecord
 
   def returned_on_cannot_be_revised
     errors.add(:returned_on, :cannot_be_revised) if returned_on_previously_changed?
-  end
-
-  def book_reserved?
-    book.reserved?
-  end
-
-  def user_actively_reading?
-    user.actively_reading?
   end
 end
