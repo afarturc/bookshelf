@@ -2,10 +2,12 @@
     <table>
         <tbody>
             <% @books.each do |book| %>
-                <tr class='<%= cycle('bg-violet-50', 'bg-white') %> shadow'>
+                <tr class='<%= cycle('bg-sky-50', 'bg-white') %> shadow'>
                     <td class="w-40"><%= image_tag(book.cover_url, class: 'w-fill') %></td>
                     <td class="px-4">
-                        <h1 class="text-xl font-bold mb-3 hover:underline hover:cursor-pointer"><%= book.title %></h1>
+                        <%= link_to(book_path(book)) do %>
+                            <h1 class="text-xl font-bold mb-3 hover:underline"><%= book.title %></h1>
+                        <% end %>
                         <p class="max-w-xl"><%= truncate(book.description, length: 200) %></p>
                     </td>
                 </tr>
