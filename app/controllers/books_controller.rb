@@ -1,11 +1,13 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: %i[show]
+  before_action :set_book, only: %i[show edit update]
 
   def index
     @books = Book.all.order(created_at: :asc)
   end
 
   def show; end
+
+  def edit; end
 
   def new
     @book = Book.new
@@ -27,6 +29,28 @@ class BooksController < ApplicationController
         format.html do
           flash.now[:alert] = result.errors
           render :new, status: :unprocessable_entity
+        end
+        format.json { render json: { errors: result.errors }, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    result = UpdateBook.new(@book, book_params).perform
+
+    if result.success?
+      respond_to do |format|
+        format.html do
+          flash[:notice] = "#{result.book.title} was successfully updated!"
+          redirect_to(books_path)
+        end
+        format.json { render json: { book: result.book }, status: :created }
+      end
+    else
+      respond_to do |format|
+        format.html do
+          flash.now[:alert] = result.errors
+          render :edit, status: :unprocessable_entity
         end
         format.json { render json: { errors: result.errors }, status: :unprocessable_entity }
       end

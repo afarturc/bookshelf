@@ -65,4 +65,46 @@ RSpec.describe Book, type: :request do
       end
     end
   end
+
+  describe "PATCH #update" do
+    let!(:book) { create(:book) }
+
+    context "when params are valid" do
+      let(:book_params) do
+        {
+          book: {
+            description: FFaker::Book.description,
+          }
+        }
+      end
+
+      it "updates a new book and redirects" do
+        aggregate_failures do
+          expect { patch book_path(book, book_params) }.not_to change(Book, :count)
+          expect(response).to have_http_status(:found)
+          expect(flash[:notice]).to eq("#{book.title} was successfully updated!")
+          expect(response).to redirect_to(books_path)
+        end
+      end
+    end
+
+    context "when params are invalid" do
+      let(:invalid_params) do
+        {
+          book: {
+            description: nil,
+          }
+        }
+      end
+      let(:validation_errors) { ["Description can't be blank"] }
+
+      it "does not update a book" do
+        aggregate_failures do
+          expect { patch book_path(book, invalid_params) }.not_to change(Book, :count)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(flash[:alert]).to eq(validation_errors)
+        end
+      end
+    end
+  end
 end
