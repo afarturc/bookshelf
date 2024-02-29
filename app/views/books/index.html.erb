@@ -11,5 +11,14 @@
                 </tr>
             <% end %>
         </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <div class="my-8">
+                        <%= link_to("New Book", new_book_path, class: "inline rounded-lg p-3 bg-green-600 text-white block font-medium") %>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </div>
