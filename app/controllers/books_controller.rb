@@ -1,7 +1,11 @@
 class BooksController < ApplicationController
+  before_action :set_book, only: %i[show]
+
   def index
     @books = Book.all.order(created_at: :asc)
   end
+
+  def show; end
 
   def new
     @book = Book.new
@@ -33,5 +37,9 @@ class BooksController < ApplicationController
 
   def book_params
     params.require(:book).permit(:title, :description, :genre, :cover_url)
+  end
+
+  def set_book
+    @book = Book.find(params[:id])
   end
 end
