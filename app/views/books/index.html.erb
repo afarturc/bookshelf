@@ -10,6 +10,9 @@
                         <% end %>
                         <p class="max-w-xl"><%= truncate(book.description, length: 200) %></p>
                     </td>
+                    <td class="px-4">
+                        <%= link_to("Edit", edit_book_path(book), class: "hover:underline") %>
+                    </td>
                 </tr>
             <% end %>
         </tbody>
