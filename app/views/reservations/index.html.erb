@@ -1,0 +1,24 @@
+<div class="w-1/2 mx-auto">
+    <h1 class="font-bold text-5xl pb-8">My reservations</h1>
+    <table>
+        <tbody>
+            <% @reservations.each do |reservation| %>
+                <tr class='grid grid-cols-3 gap-4 p-4 <%= cycle('bg-sky-50', 'bg-white') %> shadow'>
+                    <td class="">
+                        <%= reservation.book.title %>
+                    </td>
+                    <td class="flex gap-2 items-center justify-center">
+                        <%= image_tag("arrow-down.svg", class: "w-4") %>
+                        <%= reservation.created_at.to_date %>
+                    </td>
+                    <td class="flex gap-2 items-center justify-center">
+                        <% if reservation.returned? %>
+                            <%= image_tag("arrow-up.svg", class: "w-4") %>
+                            <%= reservation.returned_on %>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>
