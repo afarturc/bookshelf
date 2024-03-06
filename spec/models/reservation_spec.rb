@@ -30,7 +30,7 @@ RSpec.describe Reservation, type: :model do
       end
     end
 
-    context "when reservation is ends in a past date" do
+    context "when reservation ends in a past date" do
       it "raise a validation error" do
         expect { create(:reservation, returned_on: Date.yesterday) }.to raise_error(ActiveRecord::RecordInvalid)
       end

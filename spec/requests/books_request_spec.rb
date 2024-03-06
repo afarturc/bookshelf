@@ -64,6 +64,67 @@ RSpec.describe Book, type: :request do
     end
   end
 
+  describe "GET #new" do
+    context "when user logged in" do
+      include_context 'with logged user'
+
+      it "shows new book form" do
+        get new_book_path
+
+        aggregate_failures do
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eq("text/html; charset=utf-8")
+          expect(response.body).to include("Add a new book")
+        end
+      end
+    end
+
+    context "when user logged out" do
+      it "redirects to login" do
+        get new_book_path
+
+        aggregate_failures do
+          expect(response).to redirect_to(new_user_session_path)
+          expect(response).to have_http_status(:found)
+          expect(response.content_type).to eq("text/html; charset=utf-8")
+          expect(flash[:alert]).to eq("You need to sign in or sign up before continuing.")
+        end
+      end
+    end
+  end
+
+  describe "GET #edit" do
+    subject(:book) { create(:book) }
+
+    context "when user logged in" do
+      include_context 'with logged user'
+
+      it "shows edit book form" do
+        get edit_book_path(book)
+
+        aggregate_failures do
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eq("text/html; charset=utf-8")
+          expect(response.body).to include("Edit")
+          expect(response.body).to include(book.title)
+        end
+      end
+    end
+
+    context "when user logged out" do
+      it "redirects to login" do
+        get edit_book_path(book)
+
+        aggregate_failures do
+          expect(response).to redirect_to(new_user_session_path)
+          expect(response).to have_http_status(:found)
+          expect(response.content_type).to eq("text/html; charset=utf-8")
+          expect(flash[:alert]).to eq("You need to sign in or sign up before continuing.")
+        end
+      end
+    end
+  end
+
   describe "POST #create" do
     context "when logged in" do
       include_context "with logged user"
@@ -148,6 +209,35 @@ RSpec.describe Book, type: :request do
             expect(response).to have_http_status(:unprocessable_entity)
             expect(flash[:alert]).to eq(validation_errors)
           end
+        end
+      end
+    end
+  end
+
+  describe "POST #reserve" do
+    subject(:book) { create(:book) }
+
+    context "when user is logged in" do
+      include_context "with logged user"
+
+      it "creates a new reservation and redirects" do
+        aggregate_failures do
+          expect { post reserve_book_path(book.id) }.to change(Reservation, :count).by(1)
+          expect(response).to redirect_to(books_path)
+          expect(response).to have_http_status(:found)
+          expect(flash[:notice]).to eq("#{book.title} was successfully reserved")
+        end
+      end
+    end
+
+    context "when user is logged out" do
+      it "does not create a new reservation and redirects to login" do
+        aggregate_failures do
+          expect { post reserve_book_path(book.id) }.not_to change(Reservation, :count)
+          expect(response).to redirect_to(new_user_session_path)
+          expect(response).to have_http_status(:found)
+          expect(response.content_type).to eq("text/html; charset=utf-8")
+          expect(flash[:alert]).to eq("You need to sign in or sign up before continuing.")
         end
       end
     end

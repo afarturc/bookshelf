@@ -28,4 +28,7 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  errors:
+    messages:
+      book_already_reserved: "This book has already been reserved."
+      user_has_reservations: "You already have an ongoing reservation."

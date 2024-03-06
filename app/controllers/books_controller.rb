@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_book, only: %i[show edit update]
+  before_action :set_book, only: %i[show edit update reserve]
 
   def index
     @books = Book.all.order(created_at: :asc)
@@ -55,6 +55,25 @@ class BooksController < ApplicationController
         end
         format.json { render json: { errors: result.errors }, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def reserve
+    result = ReserveBook.new(current_user, @book).perform
+
+    if result.success?
+      respond_to do |format|
+        format.html do
+          redirect_to(books_path, notice: "#{@book.title} was successfully reserved")
+        end
+        format.json { render json: { reservation: result.reservation }, status: :created }
+      end
+    else
+      format.html do
+        flash.now[:alert] = result&.errors
+        render :show, status: :unprocessable_entity
+      end
+      format.json { render json: { errors: result&.errors }, status: :unprocessable_entity }
     end
   end
 

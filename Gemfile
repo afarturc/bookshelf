@@ -64,17 +64,27 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  
+  # https://github.com/ryanb/letter_opener 
+  gem "letter_opener"
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
   # https://github.com/thoughtbot/shoulda-matchers
   gem "shoulda-matchers", "~> 6.0"
+
+  # https://github.com/wspurgin/rspec-sidekiq
+  gem 'rspec-sidekiq'
 end
 
 # https://github.com/heartcombo/devise
 gem "devise", "~> 4.9"
 
 gem "tailwindcss-rails", "~> 2.3"
+
+# https://github.com/sidekiq/sidekiq
+gem "sidekiq", "~> 7.2"
