@@ -1,0 +1,19 @@
+<tr id="<%= dom_id(reservation) %>_row" class='grid grid-cols-3 gap-4 p-4 <%= cycle('bg-sky-50', 'bg-white') %> shadow'>
+    <td class="">
+        <%= link_to(book_path(reservation.book), "data-turbo-frame": "_top") do %>
+            <h2 class="font-bold text-md hover:underline"><%= reservation.book.title %></h2>
+        <% end %>
+    </td>
+    <td class="flex gap-2 items-center justify-end">
+        <%= image_tag("arrow-down.svg", class: "w-4") %>
+        <%= reservation.created_at.to_date %>
+    </td>
+    <td class="flex gap-2 items-center justify-end">
+        <% if reservation.returned? %>
+            <%= image_tag("arrow-up.svg", class: "w-4") %>
+            <%= reservation.returned_on %>
+        <% else %>
+            <%= button_to("Return book", reservation_path(reservation), method: :put, class: "hover:underline") %>
+        <% end %>
+    </td>
+</tr>
