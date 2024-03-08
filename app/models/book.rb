@@ -10,7 +10,8 @@ class Book < ApplicationRecord
     android: 7,
     ios: 8,
     finance: 9,
-    productivity: 10
+    productivity: 10,
+    fantasy: 11
   }
 
   has_many :reservations, dependent: :destroy

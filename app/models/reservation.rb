@@ -11,7 +11,7 @@ class Reservation < ApplicationRecord
   delegate :actively_reading?, to: :user, prefix: true
 
   scope :active, -> { where(returned_on: nil) }
-  scope :inactive, -> { where.not(returned: nil) }
+  scope :inactive, -> { where.not(returned_on: nil) }
 
   def returned?
     returned_on.present?

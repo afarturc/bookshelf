@@ -2,7 +2,7 @@
     <table>
         <tbody>
             <% @books.each do |book| %>
-                <tr class='<%= cycle('bg-sky-50', 'bg-white') %> shadow'>
+                <tr class='<%= cycle('bg-sky-50', 'bg-white') %>'>
                     <td class="w-40"><%= image_tag(book.cover_url, class: 'w-fill') %></td>
                     <td class="px-4">
                         <%= link_to(book_path(book)) do %>
