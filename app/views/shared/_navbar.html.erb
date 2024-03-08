@@ -4,7 +4,18 @@
             <%= link_to(root_path) do %>
                 <h1 class="font-bold text-xl">Bookshelf</h1>
             <% end %>
-            <%= button_to "Log out", destroy_user_session_path, method: :delete %>
+            <div class="flex gap-4 items-center">
+                <%= link_to(reservations_path) do %>
+                    <%= image_tag("bookmark.svg", class: "w-6") %>
+                <% end %>
+                <div class="flex gap-1">
+                    <%= image_tag("user.svg", class: "w-5") %>
+                    <span><%= current_user.first_name %></span>
+                </div>
+                <%= button_to destroy_user_session_path, method: :delete, class: "flex self-baseline" do %>
+                    <%= image_tag("logout.svg", class: "w-5") %>
+                <% end %>
+            <div>
         </div>
     </nav>
 <% end %>

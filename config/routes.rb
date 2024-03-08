@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :books, only: %i[index show new create edit update] do
     post :reserve, on: :member
   end
+  resources :reservations, only: %i[index]
   mount Sidekiq::Web => "/sidekiq" # mount Sidekiq::Web in your Rails app
   root "books#index"
 end
