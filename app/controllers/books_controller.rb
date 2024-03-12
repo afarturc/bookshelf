@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_book, only: %i[show edit update reserve]
+  before_action :set_book, only: %i[show edit update reserve destroy]
 
   def index
     @books = Book.all.order(created_at: :asc)
@@ -55,6 +55,22 @@ class BooksController < ApplicationController
         end
         format.json { render json: { errors: result.errors }, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def destroy
+    result = DestroyBook.new(@book).perform
+
+    if result.success?
+      respond_to do |format|
+        flash[:notice] = "#{result.book.title} was successfully removed from the collection"
+        format.turbo_stream
+        format.json { head :ok }
+      end 
+    else
+      respond_to do |format|
+        format.json { head :unprocessable_entity }
+      end 
     end
   end
 

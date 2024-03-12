@@ -1,1 +1,2 @@
 <%= turbo_stream.replace "#{dom_id(@active_reservation)}_row", partial: "reservations/row", locals: { reservation: @active_reservation } %>
+<%= turbo_stream.replace "active_reservation_badge" %>

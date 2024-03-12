@@ -88,3 +88,6 @@ gem "tailwindcss-rails", "~> 2.3"
 
 # https://github.com/sidekiq/sidekiq
 gem "sidekiq", "~> 7.2"
+
+# https://github.com/sidekiq-cron/sidekiq-cron
+gem "sidekiq-cron"

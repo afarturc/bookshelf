@@ -31,6 +31,57 @@ RSpec.describe Reservation, type: :request do
         end
     end
 
+    describe "#GET show" do
+        context "when user is logged in" do
+            include_context "with logged user"
+
+            context "when user as a reservation ongoing" do
+                let(:reservation) { create(:reservation, user: user) }
+
+                it "returns current user reservation" do
+                    get reservation_path(reservation)
+
+                    aggregate_failures do
+                        expect(response).to have_http_status(:ok)
+                        expect(response.content_type).to eq("text/html; charset=utf-8")
+                        expect(body).to include(reservation.book.title)
+                    end
+                end
+            end
+
+            context "when user does not have a reservation ongoing" do
+                let(:reservation) { create(:reservation, user: user) }
+
+                before do 
+                    reservation.update(returned_on: Date.today) 
+                    user.reload
+                end
+
+                it "returns empty body" do
+                    get reservation_path(reservation)
+
+                    aggregate_failures do
+                        expect(response).to have_http_status(:not_found)
+                    end
+                end
+            end
+        end
+
+        context "when user is logged out" do
+            let(:reservation) { create(:reservation) }
+
+            it "redirects to login" do
+                get reservation_path(reservation)
+
+                aggregate_failures do
+                    expect(response).to redirect_to(new_user_session_path)
+                    expect(response).to have_http_status(:found)
+                    expect(response.content_type).to eq("text/html; charset=utf-8")
+                end
+            end
+        end
+    end
+
     describe "#PATCH update" do
         context "when user is logged in" do
             include_context "with logged user"
