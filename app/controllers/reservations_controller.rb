@@ -1,9 +1,11 @@
 class ReservationsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_reservations, only: %i[index]
-    before_action :set_active_reservation, only: %i[update]
+    before_action :set_active_reservation, only: %i[update show]
 
     def index; end
+
+    def show; end
 
     def update
         result = ReturnBook.new(@active_reservation).perform

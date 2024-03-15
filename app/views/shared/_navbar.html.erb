@@ -1,7 +1,7 @@
 <% if user_signed_in? %>
     <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm shadow-sm">
         <div class="flex p-3 mx-5 items-center justify-between">
-            <%= link_to(root_path) do %>
+            <%= link_to(books_path, "data-turbo": false) do %>
                 <h1 class="font-bold text-xl">Bookshelf</h1>
             <% end %>
             <div class="flex gap-4 items-center">

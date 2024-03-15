@@ -1,8 +1,14 @@
-<div class="grid gap-10">
-    <table>
+<div class="grid grid-cols-4 gap-10">
+    <div class="col-span-1">
+        <% if current_user.active_reservation %>
+            <%= turbo_frame_tag("active_reservation_badge", src: reservation_path(current_user.active_reservation.id)) %>
+        <% end %>
+        <%= turbo_frame_tag("company_reservations", src: company_reservations_path) %>
+    </div>
+    <table class="col-span-3">
         <tbody>
             <% @books.each do |book| %>
-                <tr class='<%= cycle('bg-sky-50', 'bg-white') %>'>
+                <tr id="<%= dom_id(book) %>_row" class='<%= cycle('bg-sky-50', 'bg-white') %>'>
                     <td class="w-40"><%= image_tag(book.cover_url, class: 'w-fill') %></td>
                     <td class="px-4">
                         <%= link_to(book_path(book)) do %>
@@ -12,6 +18,7 @@
                     </td>
                     <td class="px-4">
                         <%= link_to("Edit", edit_book_path(book), class: "hover:underline") %>
+                        <%= button_to("Delete", book_path(book), method: :delete, class: "mt-4 hover:underline") %>
                     </td>
                 </tr>
             <% end %>
